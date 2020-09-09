@@ -10,33 +10,33 @@
 
 <form method='post'>
 
-    <div id='xs'>
-    <div class='entry'> X </div>
-    <div class='entry'>
-        <input type='checkbox' id='xlog' value='xlog' name='xlog'
-        {% if xlog %} checked {% endif %}>
-        <label for='xlog'> log scale </label>
-    </div>
-    {% for key in data.keys() %}
-    <div class='entry'>
-        <input type='radio' id='{{ key }}' value='{{ key }}' name='x'
-        {% if key == xkey %} checked {% endif %}> 
-        <label for='{{ key }}'> {{ key }} </label>
-    </div>
-    {% endfor %}
-    </div>
-
     <div id='ys'>
-    <div class='entry'> Y </div>
+    <div class='entry'> Y axis </div>
     <div class='entry'>
         <input type='checkbox' id='ylog' value='ylog' name='ylog'
         {% if ylog %} checked {% endif %}>
-        <label for='ylog'> log scale </label>
+        <label for='ylog'> log </label>
     </div>
     {% for key in data.keys() %}
     <div class='entry'>
         <input type='checkbox' id='{{ key }}' value='{{ key }}' name='y'
         {% if key in ykeys %} checked {% endif %}> 
+        <label for='{{ key }}'> {{ key }} </label>
+    </div>
+    {% endfor %}
+    </div>
+
+    <div id='xs'>
+    <div class='entry'> X axis </div>
+    <div class='entry'>
+        <input type='checkbox' id='xlog' value='xlog' name='xlog'
+        {% if xlog %} checked {% endif %}>
+        <label for='xlog'> log </label>
+    </div>
+    {% for key in data.keys() %}
+    <div class='entry'>
+        <input type='radio' id='{{ key }}' value='{{ key }}' name='x'
+        {% if key == xkey %} checked {% endif %}> 
         <label for='{{ key }}'> {{ key }} </label>
     </div>
     {% endfor %}

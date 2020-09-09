@@ -21,7 +21,6 @@ body {
 
 #page {
   margin: 0px 30px 30px;
-  padding: 0px 30px 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,12 +37,14 @@ body {
 form {
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
 }
 
 iframe {
-  margin: 10px;
-  min-width: 400px;
-  min-height: 400px;
+  margin: 20px 0px;
+  min-width: 450px;
+  min-height: 450px;
   border: 1px solid #eee;
 }
 
@@ -55,6 +56,7 @@ button {
 #ys {
   display: flex;
   flex-direction: column;
+  margin: 10px;
 }
 
 .entry {
