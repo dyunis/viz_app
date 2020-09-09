@@ -10,9 +10,6 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
-# stop caching plot.html
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-
 def main():
     app.run(debug=True)
 
@@ -27,13 +24,6 @@ def nocache(view):
         return response
 
     return update_wrapper(no_cache, view)
-
-# no cacheing at all
-# @app.after_request
-def add_header(response):
-    if 'Cache-Control' not in response.headers:
-        response.headers['Cache-Control'] = 'no-store'
-    return response
 
 @app.route('/', methods=['GET', 'POST'])
 @nocache
