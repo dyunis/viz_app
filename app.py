@@ -1,10 +1,10 @@
 from datetime import datetime
 from functools import wraps, update_wrapper
 import json
+import os.path as osp
 
-from flask import Flask, request, render_template, redirect, send_from_directory, make_response
+from flask import Flask, request, render_template, send_from_directory, make_response
 import plotly
-import plotly.graph_objects as go
 from werkzeug.http import http_date
 from werkzeug.utils import secure_filename
 
@@ -28,21 +28,17 @@ def nocache(view):
 @app.route('/', methods=['GET', 'POST'])
 @nocache
 def index():
-    with open('data.json', 'r') as f: 
-        data = json.load(f)
+    data = load('data.json')
 
     if request.method == 'POST':
         xkey = request.form.get('x')
         ykeys = request.form.getlist('y')
+        xlog = request.form.get('xlog') is not None
+        ylog = request.form.get('ylog') is not None
 
-        # make fig with plotly
-        fig = go.Figure()
-        for key in ykeys:
-            fig.add_trace(go.Scatter(x=data[xkey], y=data[key], name=key))
+        plot(data, xkey, ykeys, xlog, ylog)
 
-        plot_html = plotly.io.write_html(fig, './plots/plot.html')
-
-        return render_template('index.html', data=data, plot=True, xkey=xkey, ykeys=ykeys)
+        return render_template('index.html', data=data, plot=True, xkey=xkey, ykeys=ykeys, xlog=xlog, ylog=ylog)
 
     return render_template('index.html', data=data, plot=False, xkey=None, ykeys=[])
 
@@ -50,6 +46,34 @@ def index():
 @nocache
 def send_plot(filename):
     return send_from_directory('plots', filename)
+
+def plot(data, xkey, ykeys, xlog, ylog):
+    fig = plotly.graph_objects.Figure()
+    for key in ykeys:
+        fig.add_trace(plotly.graph_objects.Scatter(x=data[xkey], y=data[key], name=key))
+
+    if xlog:
+        fig.update_xaxes(type='log')
+    if ylog:
+        fig.update_yaxes(type='log')
+
+    fig.update_layout(xaxis_title=xkey, yaxis_title='value')
+
+    plotly.io.write_html(fig, './plots/plot.html')
+
+# loads a json or dir of jsons
+def load(path):
+    if osp.isdir(path):
+        data = {}
+        files = glob.glob(osp.join(path, '*.json'))
+        for f in files:
+            key = osp.basename(f).rstrip('.json')
+            data[key] = json.load(f)
+
+    elif osp.isfile(path):
+        with open(path, 'r') as f: 
+            data = json.load(f)
+    return data
 
 if __name__=='__main__':
     main()

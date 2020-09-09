@@ -10,9 +10,10 @@
 }
 
 body {
-  font-family: 'Work Sans', sans-serif;
+  /* font-family: 'Work Sans', sans-serif; */
+  font-family: 'Arial', sans-serif;
   font-size: 20px;
-  color: #777;
+  color: #000;
   line-height: 1.35em;
   background-color: #006ec7;
 }
@@ -29,10 +30,32 @@ body {
 
 form {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
+iframe {
+  min-width: 400px;
+  min-height: 400px;
+  border: none;
+}
 
-button {
-  margin: 2px;
+#xs {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+#ys {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.entry {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
