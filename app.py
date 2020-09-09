@@ -57,7 +57,8 @@ def plot(data, xkey, ykeys, xlog, ylog):
     if ylog:
         fig.update_yaxes(type='log')
 
-    fig.update_layout(xaxis_title=xkey, yaxis_title='value')
+    ytitle = ykeys[0] if len(ykeys) == 1 else 'value'
+    fig.update_layout(xaxis_title=xkey, yaxis_title=ytitle)
 
     plotly.io.write_html(fig, './plots/plot.html')
 
