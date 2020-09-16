@@ -11,6 +11,9 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 
 def main():
+    if not osp.exists('plots'):
+        os.makedirs('plots')
+
     app.run(debug=True)
 
 def nocache(view):

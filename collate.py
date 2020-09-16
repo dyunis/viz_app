@@ -14,8 +14,8 @@ def collate(dirs):
             for key in json_dict.keys():
                 if key != 'step':
                     collated[f'{osp.basename(d)}_{key}'] = json_dict[key]
-
-            collated['step'] = json_dict['step']
+                else:
+                    collated['step'] = json_dict[key]
 
     with open('data.json', 'w') as f:
         json.dump(collated, f)

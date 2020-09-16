@@ -19,9 +19,9 @@
     </div>
     {% for key in data.keys() %}
     <div class='entry'>
-        <input type='checkbox' id='{{ key }}' value='{{ key }}' name='y'
+        <input type='checkbox' id='y{{ key }}' value='{{ key }}' name='y'
         {% if key in ykeys %} checked {% endif %}> 
-        <label for='{{ key }}'> {{ key }} </label>
+        <label for='y{{ key }}'> {{ key }} </label>
     </div>
     {% endfor %}
     </div>
@@ -35,9 +35,9 @@
     </div>
     {% for key in data.keys() %}
     <div class='entry'>
-        <input type='radio' id='{{ key }}' value='{{ key }}' name='x'
+        <input type='radio' id='x{{ key }}' value='{{ key }}' name='x'
         {% if key == xkey %} checked {% endif %}> 
-        <label for='{{ key }}'> {{ key }} </label>
+        <label for='x{{ key }}'> {{ key }} </label>
     </div>
     {% endfor %}
     </div>
