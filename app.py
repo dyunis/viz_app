@@ -61,7 +61,8 @@ def plot(data, xkey, ykeys, xlog, ylog):
         fig.update_yaxes(type='log')
 
     ytitle = ykeys[0] if len(ykeys) == 1 else 'value'
-    fig.update_layout(xaxis_title=xkey, yaxis_title=ytitle)
+    margin = {'b': 20, 'l': 20, 'r': 20, 't': 30, 'pad': 0}
+    fig.update_layout(autosize=True, xaxis_title=xkey, yaxis_title=ytitle, margin=margin)
 
     plotly.io.write_html(fig, './plots/plot.html')
 

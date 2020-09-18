@@ -12,7 +12,7 @@
 body {
   /* font-family: 'Work Sans', sans-serif; */
   font-family: 'Arial', sans-serif;
-  font-size: 20px;
+  font-size: 10px;
   color: #000;
   line-height: 1.35em;
   /* background-color: #006ec7; */
@@ -43,13 +43,13 @@ form {
 
 iframe {
   margin: 20px 0px;
-  min-width: 450px;
-  min-height: 450px;
+  width: 800px;
+  height: 600px;
   border: 1px solid #eee;
 }
 
 button {
-  font-size: 20px;
+  font-size: 10px;
 }
 
 #xs,

@@ -6,9 +6,12 @@ if [ $# -ne 1 ]; then
 fi
 
 if [ -f $1 ]; then
-  cp $1 data.json
+  cp $1 data/data.json
 elif [ -d $1 ]; then
-  cp $1 data
+  if [ ! -d data/$1 ]; then
+    mkdir data/$1
+  fi
+  cp $1 data/$1
 else
   echo "$1 is neither a file nor a directory"
 fi
