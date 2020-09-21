@@ -2,22 +2,29 @@ import json
 import os.path as osp
 import sys
 
-def collate(dirs):
-    for d in dirs:
-        assert osp.exists(d)
+def collate(paths):
+    for p in paths:
+        assert osp.exists(p)
 
     collated = {}
-    for d in dirs:
-        with open(osp.join(d, 'stats.json'), 'r') as f: 
-            json_dict = json.load(f)
+    for p in paths:
 
-            for key in json_dict.keys():
-                if key != 'step':
-                    collated[f'{osp.basename(d)}_{key}'] = json_dict[key]
-                else:
-                    collated['step'] = json_dict[key]
+        if osp.isdir(p):
+            prefix = osp.basename(p)
+            with open(osp.join(p, 'stats.json'), 'r') as f: 
+                json_dict = json.load(f)
+        elif osp.isfile(p):
+            prefix = osp.basename(osp.dirname(p))
+            with open(p, 'r') as f:
+                json_dict = json.load(f)
 
-    with open('data.json', 'w') as f:
+        for key in json_dict.keys():
+            if key != 'step':
+                collated[f'{prefix}_{key}'] = json_dict[key]
+            else:
+                collated['step'] = json_dict[key]
+
+    with open('data/data.json', 'w') as f:
         json.dump(collated, f)
 
 if __name__=='__main__':

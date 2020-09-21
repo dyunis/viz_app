@@ -31,7 +31,7 @@ def nocache(view):
 @app.route('/', methods=['GET', 'POST'])
 @nocache
 def index():
-    data = load('data.json')
+    data = load('data/data.json')
 
     if request.method == 'POST':
         xkey = request.form.get('x')
