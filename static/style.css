@@ -49,7 +49,7 @@ iframe {
 }
 
 #update-button,
-#xlog-container,
-#ylog-container {
+#x-misc-controls,
+#y-misc-controls {
   margin: 10px;
 }

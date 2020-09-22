@@ -25,6 +25,12 @@ function update_plot () {
   })
 }
 
+function clear_selections (axis) {
+  let id = axis === 'y' ? '#y' : '#x'
+  $(id).val(null).trigger('change')
+}
+
+
 $(document).ready(function() {
   $('.js-example-placeholder-single').select2();
   $('.js-example-placeholder-multiple').select2();
