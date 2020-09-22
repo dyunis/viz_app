@@ -29,5 +29,15 @@ $(document).ready(function() {
   $('.js-example-placeholder-single').select2();
   $('.js-example-placeholder-multiple').select2();
   $('#x').select2({placeholder: 'X axis'});
-  $('#y').select2({placeholder: 'Y axis'});
+  $('#y').select2({
+    placeholder: 'Y axis',
+    tags: true,
+    createTag: function (params) {
+      if (! RegExp(`^r'.+'$`).test(params.term)) {
+        return null;
+      }
+
+      return {id: params.term, text: params.term}
+    }
+  });
 })

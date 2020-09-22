@@ -2,6 +2,7 @@ from datetime import datetime
 from functools import wraps, update_wrapper
 import json
 import os.path as osp
+import re
 
 from flask import Flask, request, render_template, send_from_directory, make_response, jsonify
 import plotly
@@ -43,8 +44,22 @@ def options():
     ykeys = post_json['ykeys']
     xlog = post_json['xlog']
     ylog = post_json['ylog']
-    # xlog = request.form.get('xlog') is not None
-    # ylog = request.form.get('ylog') is not None
+
+    regex = re.compile("^r'.+'$")
+    regexes = list(filter(lambda key: regex.match(key), ykeys))
+
+    if len(regexes) > 0:
+        ykeys = [key for key in ykeys if key not in regexes]
+
+        regexes = list(map(lambda reg: reg.lstrip("r'").rstrip("'"), regexes))
+
+        # should be a functional way to do this with reduce? turns out faster to set union all at once
+        matches = list(map(lambda reg: set(filter(lambda key: bool(re.search(reg, key)), data.keys())), regexes))
+        matches = set().union(*matches)
+
+        for key in matches:
+            if key not in ykeys:
+                ykeys.append(key)
 
     plot(data, xkey, ykeys, xlog, ylog)
     
