@@ -3,7 +3,7 @@ from functools import wraps, update_wrapper
 import json
 import os.path as osp
 
-from flask import Flask, request, render_template, send_from_directory, make_response
+from flask import Flask, request, render_template, send_from_directory, make_response, jsonify
 import plotly
 from werkzeug.http import http_date
 from werkzeug.utils import secure_filename
@@ -28,32 +28,38 @@ def nocache(view):
 
     return update_wrapper(no_cache, view)
 
-@app.route('/', methods=['GET', 'POST'])
-@nocache
+@app.route('/')
 def index():
+    global data
     data = load('data/data.json')
+    return render_template('index.html', data=data, plot=True)
 
-    if request.method == 'POST':
-        xkey = request.form.get('x')
-        ykeys = request.form.getlist('y')
-        xlog = request.form.get('xlog') is not None
-        ylog = request.form.get('ylog') is not None
+# post without a form
+@app.route('/options', methods=['POST'])
+def options():
+    post_json = request.get_json()
 
-        plot(data, xkey, ykeys, xlog, ylog)
+    xkey = post_json['xkey']
+    ykeys = post_json['ykeys']
+    xlog = post_json['xlog']
+    ylog = post_json['ylog']
+    # xlog = request.form.get('xlog') is not None
+    # ylog = request.form.get('ylog') is not None
 
-        return render_template('index.html', data=data, plot=True, xkey=xkey, ykeys=ykeys, xlog=xlog, ylog=ylog)
+    plot(data, xkey, ykeys, xlog, ylog)
+    
+    return 'OK', 200
 
-    return render_template('index.html', data=data, plot=False, xkey=None, ykeys=[])
 
 @app.route('/plots/<filename>')
 @nocache
 def send_plot(filename):
     return send_from_directory('plots', filename)
 
-def plot(data, xkey, ykeys, xlog, ylog):
+def plot(dset, xkey, ykeys, xlog=False, ylog=False):
     fig = plotly.graph_objects.Figure()
     for key in ykeys:
-        fig.add_trace(plotly.graph_objects.Scatter(x=data[xkey], y=data[key], name=key))
+        fig.add_trace(plotly.graph_objects.Scatter(x=dset[xkey], y=dset[key], name=key))
 
     if xlog:
         fig.update_xaxes(type='log')
@@ -69,16 +75,17 @@ def plot(data, xkey, ykeys, xlog, ylog):
 # loads a json or dir of jsons
 def load(path):
     if osp.isdir(path):
-        data = {}
+        dset = {}
         files = glob.glob(osp.join(path, '*.json'))
         for f in files:
             key = osp.basename(f).rstrip('.json')
-            data[key] = json.load(f)
+            dset[key] = json.load(f)
 
     elif osp.isfile(path):
         with open(path, 'r') as f: 
-            data = json.load(f)
-    return data
+            dset = json.load(f)
+
+    return dset
 
 if __name__=='__main__':
     main()

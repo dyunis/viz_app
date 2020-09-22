@@ -2,49 +2,47 @@
 {% block content %}
 
 {% if plot %}
-    <iframe id='plot' scrolling='no' src='./plots/plot.html'>
-    </iframe>
+<iframe id='plot' scrolling='no' src='./plots/plot.html'></iframe>
 {% else %}
-    <p> Plot not yet built </p>
+<p> Plot not yet built </p>
 {% endif %}
 
-<form method='post'>
+<div id='controls'>
+  <div id='ylog-container'> 
+    <input type='checkbox' id='ylog' name='ylog'>
+    <label for='ylog'> log </label>
+  </div>
 
-    <div id='ys'>
-    <div class='entry'> Y </div>
-    <div class='entry'>
-        <input type='checkbox' id='ylog' value='ylog' name='ylog'
-        {% if ylog %} checked {% endif %}>
-        <label for='ylog'> log </label>
-    </div>
+  <select class='js-example-placeholder-multiple' name='y' id='y' multiple='multiple'>
+
+  {% for key in data.keys() %}
+    <option value='{{ key }}' {% if key in ykeys %} checked {% endif %}>
+      {{ key }}
+    </option>
+  {% endfor %}
+
+  </select>
+
+  <div id='xlog-container'> 
+    <input type='checkbox' id='xlog' name='xlog'>
+    <label for='xlog'> log </label>
+  </div>
+
+  <select class='js-example-placeholder-single' name='x' id='x'>
+
+    <!-- select2 requires an empty option for placeholder in single selects -->
+    <option></option>
+
     {% for key in data.keys() %}
-    <div class='entry'>
-        <input type='checkbox' id='y{{ key }}' value='{{ key }}' name='y'
-        {% if key in ykeys %} checked {% endif %}> 
-        <label for='y{{ key }}'> {{ key }} </label>
-    </div>
+    <option value='{{ key }}' {% if key == xkey %} checked {% endif %}>
+    {{ key }}
+    </option>
     {% endfor %}
-    </div>
+  </select>
 
-    <div id='xs'>
-    <div class='entry'> X </div>
-    <div class='entry'>
-        <input type='checkbox' id='xlog' value='xlog' name='xlog'
-        {% if xlog %} checked {% endif %}>
-        <label for='xlog'> log </label>
-    </div>
-    {% for key in data.keys() %}
-    <div class='entry'>
-        <input type='radio' id='x{{ key }}' value='{{ key }}' name='x'
-        {% if key == xkey %} checked {% endif %}> 
-        <label for='x{{ key }}'> {{ key }} </label>
-    </div>
-    {% endfor %}
-    </div>
-
-    <button type='submit'>
-        [u]pdate
-    </button>
-</form>
+  <button id='update-button' onclick='update_plot()'>
+    Update
+  </button>
+</div>
 
 {% endblock %}
