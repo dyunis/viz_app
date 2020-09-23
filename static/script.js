@@ -1,5 +1,32 @@
 'use strict'
 
+function run_on_keycodes (func, ...codes) {
+  let pressed = new Set()
+
+  document.addEventListener('keydown', function (event) {
+    pressed.add(event.keyCode)
+    //clear the set so they have to be pressed quickly
+    setTimeout(() => pressed.clear(), 100)
+
+    for (let code of codes) {
+      if (!pressed.has(code)) {
+        return
+      }
+    }
+
+    pressed.clear()
+
+    func()
+  })
+
+  document.addEventListener('keyup', function (event) {
+    pressed.delete(event.key)
+  })
+}
+
+// ctrl-r to refresh plot
+run_on_keycodes(update_plot, 17, 82)
+
 function update_plot () {
 
   // make a post here with selected items from ykeys, xkey
@@ -46,4 +73,5 @@ $(document).ready(function() {
       return {id: params.term, text: params.term}
     }
   });
+  $('#x').val('step').trigger('change')
 })
