@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400&display=swap');
-
 html {
   box-sizing: border-box;
 }
@@ -18,12 +16,11 @@ html {
 }
 
 body {
-  /* font-family: 'Work Sans', sans-serif; */
   font-family: 'Arial', sans-serif;
   font-size: 10px;
   color: #000;
   line-height: 1.35em;
-  background-color: #121212;
+  background-color: #1d1d1d;
 }
 
 #page {
@@ -44,8 +41,9 @@ main {
 figure {
   max-height: 800px;
   max-width: 800px;
-  background-color: #2a2a2a;
-  padding: 20px;
+  background-color: #272727;
+  padding: 30px;
+  border-radius: 7px;
 }
 
 iframe {
@@ -60,7 +58,7 @@ iframe {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  align-items: center;
+  align-items: top;
   width: 100%;
 }
 
@@ -72,8 +70,19 @@ iframe {
   color: #ccc;
   display: flex;
   flex-direction: row;
+  height: fit-content;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: -ms-fit-content;
 }
 
 .log-controls > * {
   margin: 0px 3px;
+}
+
+button {
+  height: fit-content;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: -ms-fit-content;
 }
