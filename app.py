@@ -82,8 +82,10 @@ def plot(dset, xkey, ykeys, xlog=False, ylog=False):
         fig.update_yaxes(type='log')
 
     ytitle = ykeys[0] if len(ykeys) == 1 else 'value'
-    margin = {'b': 20, 'l': 20, 'r': 20, 't': 30, 'pad': 0}
-    fig.update_layout(autosize=True, xaxis_title=xkey, yaxis_title=ytitle, margin=margin)
+    margin = {'b': 0, 'l': 0, 'r': 0, 't': 0, 'pad': 0}
+    fig.update_layout(autosize=True, xaxis_title=xkey, yaxis_title=ytitle, template='plotly_dark')
+    template = {'layout': {'paper_bgcolor': '#2a2a2a', 'plot_bgcolor': '#222', 'font': {'color': '#ccc'}}}
+    fig.update_layout(template=template)
 
     plotly.io.write_html(fig, './plots/plot.html')
 

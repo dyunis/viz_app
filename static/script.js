@@ -3,9 +3,9 @@
 function update_plot () {
 
   // make a post here with selected items from ykeys, xkey
-  let y_options = Array.from(document.getElementById('y').selectedOptions)
+  let y_options = Array.from(document.querySelector('#y').selectedOptions)
   let ykeys = y_options.map( (opt) => opt.value )
-  let xkey = document.getElementById('x').selectedOptions[0].value
+  let xkey = document.querySelector('#x').selectedOptions[0].value
 
   fetch('/options', {
     headers: {'Content-Type': 'application/json'},
@@ -13,12 +13,12 @@ function update_plot () {
     body: JSON.stringify({
       'xkey': xkey,
       'ykeys': ykeys,
-      'xlog': document.getElementById('xlog').checked,
-      'ylog': document.getElementById('ylog').checked
+      'xlog': document.querySelector('#xlog').checked,
+      'ylog': document.querySelector('#ylog').checked
     })
   }).then( function success () {
     // force a refresh of iframe
-    let iframe = document.getElementsByTagName('iframe')[0]
+    let iframe = document.querySelector('iframe')
     iframe.src = iframe.src
   }, function failure () {
     console.log('error in POST')   
