@@ -61,6 +61,7 @@ function clear_selections (axis) {
 $(document).ready(function() {
   $('.js-example-placeholder-single').select2();
   $('.js-example-placeholder-multiple').select2();
+
   $('#x').select2({placeholder: 'X axis'});
   $('#y').select2({
     placeholder: 'Y axis',
@@ -73,5 +74,6 @@ $(document).ready(function() {
       return {id: params.term, text: params.term}
     }
   });
+
   $('#x').val('step').trigger('change')
 })

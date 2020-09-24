@@ -10,7 +10,7 @@
 {% endif %}
 
 <figcaption id='controls'>
-    <button id='y-clear' onclick='clear_selections("y")'> Clear </button>
+    <button class='btn' id='y-clear' onclick='clear_selections("y")'> Clear </button>
     <div class='log-controls'>
         <input type='checkbox' id='ylog' name='ylog'>
         <label for='ylog'> log </label>
@@ -43,7 +43,7 @@
     {% endfor %}
   </select>
 
-  <button id='update-button' onclick='update_plot()'>
+  <button class='btn' id='update-button' onclick='update_plot()'>
     Update
   </button>
 </figcaption>

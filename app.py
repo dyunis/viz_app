@@ -81,14 +81,28 @@ def plot(dset, xkey, ykeys, xlog=False, ylog=False):
     if ylog:
         fig.update_yaxes(type='log')
 
+    # general layout
     ytitle = ykeys[0] if len(ykeys) == 1 else 'value'
-    legend = {'xanchor': 'left', 'x': 1, 'yanchor': 'top', 'y': 1}
-    margin = {'l': 10, 'r': 10, 't': 30, 'b': 10, 'pad': 0}
-    fig.update_layout(autosize=True, xaxis_title=xkey, yaxis_title=ytitle, template='plotly_dark', legend=legend, margin=margin)
+    legend = {'xanchor': 'left', 'x': 1.02, 'y': 1}
+    fig.update_layout(xaxis_title=xkey, yaxis_title=ytitle, template='plotly_dark', legend=legend, font={'family': 'Arial'})
+
+    # small color changes
     template = {'layout': {'paper_bgcolor': '#272727', 'plot_bgcolor': '#222', 'font': {'color': '#ccc'}}}
     fig.update_layout(template=template)
 
-    plotly.io.write_html(fig, './plots/plot.html')
+    # adding toggle to hide legend
+    buttons = [{ 'visible': True, 
+                 'label': 'legend',
+                 'method': 'update',
+                 'args': [{'showlegend': True}],
+                 'args2':[{'showlegend': False}] }]
+    fig.update_layout(updatemenus=[{'type': 'buttons', 'buttons': buttons, 'x': 1.02, 'xanchor': 'left', 'y': 1.02, 'yanchor': 'bottom'}])
+
+    # editable would be nice but makes clicking on legend names impossible
+    # maybe js button to toggle editable mode?
+    config = {'responsive': True, 'scrollZoom': True, 'displayModeBar': True, 'editable': False}
+
+    plotly.io.write_html(fig, './plots/plot.html', config=config)
 
 # loads a json or dir of jsons
 def load(path):
