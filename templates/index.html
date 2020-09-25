@@ -2,6 +2,12 @@
 {% block content %}
 
 <figure>
+<figcaption>
+<button class='btn clear-btn' onclick='clear_selections("#filename")'> Clear </button>
+<select class='js-example-placeholder-multiple' name='filename' id='filename' multiple='multiple'>
+</select>
+<button class='btn' onclick='get_file()'> Update </button>
+</figcaption>
 
 {% if plot %}
 <iframe id='plot' scrolling='no' src='./plots/plot.html'></iframe>
@@ -10,7 +16,7 @@
 {% endif %}
 
 <figcaption id='controls'>
-    <button class='btn' id='y-clear' onclick='clear_selections("y")'> Clear </button>
+    <button class='btn clear-btn' onclick='clear_selections("#y")'> Clear </button>
     <div class='log-controls'>
         <input type='checkbox' id='ylog' name='ylog'>
         <label for='ylog'> log </label>

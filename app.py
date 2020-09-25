@@ -1,5 +1,6 @@
 from datetime import datetime
 from functools import wraps, update_wrapper
+import glob
 import json
 import os.path as osp
 import re
@@ -8,6 +9,8 @@ from flask import Flask, request, render_template, send_from_directory, make_res
 import plotly
 from werkzeug.http import http_date
 from werkzeug.utils import secure_filename
+
+import collate
 
 app = Flask(__name__)
 
@@ -34,6 +37,22 @@ def index():
     global data
     data = load('data/data.json')
     return render_template('index.html', data=data, plot=True)
+
+@app.route('/paths', methods=['POST'])
+def files():
+    path_json = request.get_json()
+
+    paths = path_json['paths']
+    
+    rejected = list(filter(lambda p: len(glob.glob(p)) == 0 and not osp.exists(p), paths))
+
+    for p in rejected:
+        paths.remove(p)
+
+    global data
+    data = collate.collate(paths)
+
+    return jsonify({'rejected': rejected})
 
 # post without a form
 @app.route('/options', methods=['POST'])

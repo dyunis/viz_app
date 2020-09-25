@@ -54,10 +54,10 @@ iframe {
   width: 100%;
 }
 
-#controls {
+figcaption {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: top;
   width: 100%;
 }
@@ -119,11 +119,15 @@ button {
   border-color: currentColor;
 }
 
-#y-clear {
+label {
+  color: #ccc;
+}
+
+.clear-btn {
   background-color: #4a4a4a;
 }
 
-#y-clear:active {
+.clear-btn:active {
   background-color: #2a2a2a;
 }
 
@@ -159,6 +163,19 @@ button {
 }
 
 .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
-   background-color: rgba(59, 93, 143, 1.0);
+  background-color: rgba(59, 93, 143, 1.0);
   color: #fff;
+}
+
+select {
+  width: 100%;
+  margin: 10px;
+}
+
+.hidden-dropdown {
+  display: none;
+} 
+
+#filename + .select2-container--default.select2-container--open.select2-container--below .select2-selection--multiple {
+  border-radius: 4px;
 }

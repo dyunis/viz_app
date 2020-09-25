@@ -27,6 +27,8 @@ def collate(paths):
     with open('data/data.json', 'w') as f:
         json.dump(collated, f)
 
+    return collated
+
 if __name__=='__main__':
     assert len(sys.argv) > 0
     collate(sys.argv[1:])

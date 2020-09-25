@@ -27,6 +27,17 @@ function run_on_keycodes (func, ...codes) {
 // ctrl-r to refresh plot
 run_on_keycodes(update_plot, 17, 82)
 
+function update_file () {
+  fetch('/files', {
+    headers: {'Content-Type': 'application/json'},
+    method: 'POST',
+    body: JSON.stringify({
+      'files': document.querySelector('#filename').selectedOptions
+    }).then( () => console.log('success on filename POST'),
+             () => console.log('failure on filename POST'))
+  })
+}
+
 function update_plot () {
 
   // make a post here with selected items from ykeys, xkey
@@ -52,8 +63,7 @@ function update_plot () {
   })
 }
 
-function clear_selections (axis) {
-  let id = axis === 'y' ? '#y' : '#x'
+function clear_selections (id) {
   $(id).val(null).trigger('change')
 }
 
@@ -73,6 +83,11 @@ $(document).ready(function() {
 
       return {id: params.term, text: params.term}
     }
+  });
+  $('#filename').select2({
+    placeholder: 'Files',
+    tags: true,
+    dropdownCssClass: 'hidden-dropdown'
   });
 
   $('#x').val('step').trigger('change')
