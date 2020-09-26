@@ -41,16 +41,26 @@ def index():
 @app.route('/paths', methods=['POST'])
 def files():
     path_json = request.get_json()
-
     paths = path_json['paths']
-    
-    rejected = list(filter(lambda p: len(glob.glob(p)) == 0 and not osp.exists(p), paths))
 
-    for p in rejected:
-        paths.remove(p)
+    #expand environment variables
+    def expandvars(path):
+        return re.sub(r'(?<!\\)\$[A-Za-z_][A-Za-z0-9_]*', '', osp.expandvars(path))
+    exp_paths = list(map(expandvars, paths))
+    
+    # reject if not on the system
+    rejected, to_collate = [], []
+    for i, p in enumerate(exp_paths):
+        if osp.exists(p):
+            to_collate.append(p)
+        else:
+            if len(glob.glob(p)) > 0:
+                to_collate.extend(glob.glob(p))
+            else:
+                rejected.append(paths[i])
 
     global data
-    data = collate.collate(paths)
+    data = collate.collate(to_collate)
 
     return jsonify({'rejected': rejected})
 
@@ -70,10 +80,17 @@ def options():
     if len(regexes) > 0:
         ykeys = [key for key in ykeys if key not in regexes]
 
-        regexes = list(map(lambda reg: reg.lstrip("r'").rstrip("'"), regexes))
+        regs = list(map(lambda reg: reg.lstrip("r'").rstrip("'"), regexes))
 
         # should be a functional way to do this with reduce? turns out faster to set union all at once
-        matches = list(map(lambda reg: set(filter(lambda key: bool(re.search(reg, key)), data.keys())), regexes))
+        global data
+        matches = list(map(lambda reg: set(filter(lambda key: bool(re.search(reg, key)), data.keys())), regs))
+
+        rejected = []
+        for i, match in enumerate(matches):
+            if len(match) == 0:
+                rejected.append(regexes[i])
+
         matches = set().union(*matches)
 
         for key in matches:
@@ -81,9 +98,8 @@ def options():
                 ykeys.append(key)
 
     plot(data, xkey, ykeys, xlog, ylog)
-    
-    return 'OK', 200
 
+    return jsonify({'rejected': rejected})
 
 @app.route('/plots/<filename>')
 @nocache

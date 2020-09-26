@@ -27,25 +27,35 @@ function run_on_keycodes (func, ...codes) {
 // ctrl-r to refresh plot
 run_on_keycodes(update_plot, 17, 82)
 
-function update_file () {
-  fetch('/files', {
+async function update_paths () {
+  let path_opts = Array.from(document.querySelector('#filename').selectedOptions)
+  let paths = path_opts.map( (opt) => opt.value )
+  let json = await fetch('/paths', {
     headers: {'Content-Type': 'application/json'},
     method: 'POST',
     body: JSON.stringify({
-      'files': document.querySelector('#filename').selectedOptions
-    }).then( () => console.log('success on filename POST'),
-             () => console.log('failure on filename POST'))
-  })
+      'paths': paths
+    })
+  }).then( (response) => response.json(),
+           () => console.log('failure on filename POST'))
+
+  for (let path of json['rejected']){
+    for (let opt of path_opts) {
+      if (path == opt.value) {
+        document.querySelector('[title="' + path + '"]').style.backgroundColor = 'rgba(255, 0, 0, 0.5)'
+      }
+    }
+  }
 }
 
-function update_plot () {
+async function update_plot () {
 
   // make a post here with selected items from ykeys, xkey
-  let y_options = Array.from(document.querySelector('#y').selectedOptions)
-  let ykeys = y_options.map( (opt) => opt.value )
+  let y_opts = Array.from(document.querySelector('#y').selectedOptions)
+  let ykeys = y_opts.map( (opt) => opt.value )
   let xkey = document.querySelector('#x').selectedOptions[0].value
 
-  fetch('/options', {
+  let json = await fetch('/options', {
     headers: {'Content-Type': 'application/json'},
     method: 'POST',
     body: JSON.stringify({
@@ -54,13 +64,22 @@ function update_plot () {
       'xlog': document.querySelector('#xlog').checked,
       'ylog': document.querySelector('#ylog').checked
     })
-  }).then( function success () {
+  }).then( function success (response) {
     // force a refresh of iframe
     let iframe = document.querySelector('iframe')
     iframe.src = iframe.src
+    return response.json()
   }, function failure () {
     console.log('error in POST')   
   })
+
+  for (let ykey of json['rejected']){
+    for (let opt of y_opts) {
+      if (ykey == opt.value) {
+        document.querySelector('[title="' + ykey + '"]').style.backgroundColor = 'rgba(255, 0, 0, 0.5)'
+      }
+    }
+  }
 }
 
 function clear_selections (id) {
@@ -85,7 +104,7 @@ $(document).ready(function() {
     }
   });
   $('#filename').select2({
-    placeholder: 'Files',
+    placeholder: 'Paths to load',
     tags: true,
     dropdownCssClass: 'hidden-dropdown'
   });
