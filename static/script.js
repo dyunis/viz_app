@@ -46,6 +46,15 @@ async function update_paths () {
       }
     }
   }
+
+  $('#x').empty()
+  $('#y').empty()
+  for (let key of json['keys']) {
+    $('#x').append(new Option(key, key, false, false)).trigger('change')
+    $('#y').append(new Option(key, key, false, false)).trigger('change')
+  }
+  $('#x').val('step').trigger('change')
+  $('#y').trigger('change')
 }
 
 async function update_plot () {
@@ -73,7 +82,7 @@ async function update_plot () {
     console.log('error in POST')   
   })
 
-  for (let ykey of json['rejected']){
+  for (let ykey of json['rejected']) {
     for (let opt of y_opts) {
       if (ykey == opt.value) {
         document.querySelector('[title="' + ykey + '"]').style.backgroundColor = 'rgba(255, 0, 0, 0.5)'

@@ -62,7 +62,7 @@ def files():
     global data
     data = collate.collate(to_collate)
 
-    return jsonify({'rejected': rejected})
+    return jsonify({'rejected': rejected, 'keys': list(data.keys())})
 
 # post without a form
 @app.route('/options', methods=['POST'])
