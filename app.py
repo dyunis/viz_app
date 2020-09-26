@@ -77,6 +77,7 @@ def options():
     regex = re.compile("^r'.+'$")
     regexes = list(filter(lambda key: regex.match(key), ykeys))
 
+    rejected = []
     if len(regexes) > 0:
         ykeys = [key for key in ykeys if key not in regexes]
 
@@ -86,7 +87,6 @@ def options():
         global data
         matches = list(map(lambda reg: set(filter(lambda key: bool(re.search(reg, key)), data.keys())), regs))
 
-        rejected = []
         for i, match in enumerate(matches):
             if len(match) == 0:
                 rejected.append(regexes[i])

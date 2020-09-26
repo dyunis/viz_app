@@ -15,28 +15,22 @@
 <p> Plot not yet built </p>
 {% endif %}
 
-<figcaption id='controls'>
-    <button class='btn clear-btn' onclick='clear_selections("#y")'> Clear </button>
-    <div class='log-controls'>
-        <input type='checkbox' id='ylog' name='ylog'>
-        <label for='ylog'> log </label>
-    </div>
+<figcaption>
 
-  <select class='js-example-placeholder-multiple' name='y' id='y' multiple='multiple' autofocus>
-
-  {% for key in data.keys() %}
-    <option value='{{ key }}' {% if key in ykeys %} checked {% endif %}>
-      {{ key }}
-    </option>
-  {% endfor %}
-
-  </select>
-
-<div class='log-controls'>
+  <div class='misc-controls'>
+  <div class='log-controls'>
     <input type='checkbox' id='xlog' name='xlog'>
-    <label for='xlog'> log </label>
-</div>
+    <label for='xlog'> log x </label>
+  </div>
 
+  <div class='log-controls'>
+    <input type='checkbox' id='ylog' name='ylog'>
+    <label for='ylog'> log y </label>
+  </div>
+  <button class='btn clear-btn' onclick='clear_selections("#y")'> Clear </button>
+  </div>
+
+  <div id='select-menus'>
   <select class='js-example-placeholder-single' name='x' id='x'>
 
     <!-- select2 requires an empty option for placeholder in single selects -->
@@ -49,9 +43,22 @@
     {% endfor %}
   </select>
 
+  <select class='js-example-placeholder-multiple' name='y' id='y' multiple='multiple' autofocus>
+
+  {% for key in data.keys() %}
+    <option value='{{ key }}' {% if key in ykeys %} checked {% endif %}>
+      {{ key }}
+    </option>
+  {% endfor %}
+
+  </select>
+  </div>
+
   <button class='btn' id='update-button' onclick='update_plot()'>
     Update
   </button>
+
+
 </figcaption>
 
 {% endblock %}
