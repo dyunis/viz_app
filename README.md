@@ -20,7 +20,7 @@ where 5000 is port that [Flask](https://flask.palletsprojects.com/en/1.1.x/) def
 
 Then on the remote machine I'll run the command
 `python app.py`
-and navigate to the browser on my local machine (Firefox/Chrome work best).
+and navigate to `localhost:5000` in a browser on my local machine (Firefox/Chrome work best).
 
 ### Using the app
 
@@ -34,7 +34,7 @@ The two dropdowns below the plotting area are for selecting X and Y axis. X axis
 is a single option, but Y axis supports multiple selections from any of the keys
 in the dictionary of saved stats. You can also use regexes to select many keys 
 with the format
-`r'[regex body to be filled in]'`
+`r'[your regex body]'`
 
 Any keys that the regex matches will be plotted, click the bottom-right update
 button to apply any selections to the plot.
