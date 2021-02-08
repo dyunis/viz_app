@@ -109,11 +109,15 @@ def send_plot(filename):
 def plot(dset, xkey, ykeys, xlog=False, ylog=False):
     fig = plotly.graph_objects.Figure()
     for key in ykeys:
+        # if False:
         if xkey == 'step':
             to_plot = tuple(zip(*dset[key]))
+            print(key)
             fig.add_trace(plotly.graph_objects.Scatter(x=to_plot[1], y=to_plot[0], name=key))
         else:
-            fig.add_trace(plotly.graph_objects.Scatter(x=dset[xkey], y=dset[key], name=key))
+            x_ = tuple(zip(*dset[xkey])) # dset[key] is a list of tuples (val, step)
+            y_ = tuple(zip(*dset[key]))
+            fig.add_trace(plotly.graph_objects.Scatter(x=x_[0], y=y_[0], name=key))
 
     if xlog:
         fig.update_xaxes(type='log')

@@ -8,13 +8,16 @@ def collate(paths):
 
     collated = {}
     for p in paths:
+        prefix = p
+        if '/output' in p:
+            prefix = p.replace('/output', '')
 
         if osp.isdir(p):
-            prefix = osp.basename(p)
+            prefix = osp.basename(prefix)
             with open(osp.join(p, 'stats.json'), 'r') as f: 
                 json_dict = json.load(f)
         elif osp.isfile(p):
-            prefix = osp.basename(osp.dirname(p))
+            prefix = osp.basename(osp.dirname(prefix))
             with open(p, 'r') as f:
                 json_dict = json.load(f)
 
