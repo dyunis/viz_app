@@ -14,7 +14,7 @@ def collate(paths):
 
         if osp.isdir(p):
             prefix = osp.basename(prefix)
-            with open(osp.join(p, 'stats.json'), 'r') as f: 
+            with open(osp.join(p, 'output', 'stats.json'), 'r') as f:
                 json_dict = json.load(f)
         elif osp.isfile(p):
             prefix = osp.basename(osp.dirname(prefix))
