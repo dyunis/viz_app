@@ -108,16 +108,18 @@ def send_plot(filename):
 
 def plot(dset, xkey, ykeys, xlog=False, ylog=False):
     fig = plotly.graph_objects.Figure()
-    for key in ykeys:
+    substr = longest_substr(ykeys)
+    labels = [key.replace(substr, '') for key in ykeys]
+    for i, key in enumerate(ykeys):
         # if False:
         if xkey == 'step':
             to_plot = tuple(zip(*dset[key]))
             print(key)
-            fig.add_trace(plotly.graph_objects.Scatter(x=to_plot[1], y=to_plot[0], name=key))
+            fig.add_trace(plotly.graph_objects.Scatter(x=to_plot[1], y=to_plot[0], name=labels[i]))
         else:
             x_ = tuple(zip(*dset[xkey])) # dset[key] is a list of tuples (val, step)
             y_ = tuple(zip(*dset[key]))
-            fig.add_trace(plotly.graph_objects.Scatter(x=x_[0], y=y_[0], name=key))
+            fig.add_trace(plotly.graph_objects.Scatter(x=x_[0], y=y_[0], name=labels[i]))
 
     if xlog:
         fig.update_xaxes(type='log')
@@ -161,6 +163,14 @@ def load(path):
             dset = json.load(f)
 
     return dset
+
+# from https://stackoverflow.com/questions/2892931/longest-common-substring-from-more-than-two-strings-python
+def longest_substr(strs):
+    substrs = lambda x: {x[i:i+j] for i in range(len(x)) for j in range(len(x) - i + 1)}
+    s = substrs(strs[0])
+    for val in strs[1:]:
+        s.intersection_update(substrs(val))
+    return max(s, key=len)
 
 if __name__=='__main__':
     main()
