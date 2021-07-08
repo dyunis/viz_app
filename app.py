@@ -6,6 +6,7 @@ import os.path as osp
 import re
 
 from flask import Flask, request, render_template, send_from_directory, make_response, jsonify
+import matplotlib.pyplot as plt
 import plotly
 from werkzeug.http import http_date
 from werkzeug.utils import secure_filename
@@ -107,6 +108,7 @@ def send_plot(filename):
     return send_from_directory('plots', filename)
 
 def plot(dset, xkey, ykeys, xlog=False, ylog=False):
+    ykeys = sorted(ykeys)
     fig = plotly.graph_objects.Figure()
     substr = longest_substr(ykeys)
     labels = [key.replace(substr, '') for key in ykeys]
@@ -114,8 +116,8 @@ def plot(dset, xkey, ykeys, xlog=False, ylog=False):
         # if False:
         if xkey == 'step':
             to_plot = tuple(zip(*dset[key]))
-            print(key)
-            fig.add_trace(plotly.graph_objects.Scatter(x=to_plot[1], y=to_plot[0], name=labels[i]))
+            color = matplotlib_to_plotly_color(plt.cm.summer(i / len(ykeys)))
+            fig.add_trace(plotly.graph_objects.Scatter(x=to_plot[1], y=to_plot[0], name=labels[i], marker={'color': color}))
         else:
             x_ = tuple(zip(*dset[xkey])) # dset[key] is a list of tuples (val, step)
             y_ = tuple(zip(*dset[key]))
@@ -148,6 +150,13 @@ def plot(dset, xkey, ykeys, xlog=False, ylog=False):
     config = {'responsive': True, 'scrollZoom': True, 'displayModeBar': True, 'editable': False}
 
     plotly.io.write_html(fig, './plots/plot.html', config=config)
+
+# matplotlib colors are tuples, plotly colors are strings
+def matplotlib_to_plotly_color(color):
+    if len(color) == 3:
+        return f'rgb({color[0]}, {color[1]}, {color[2]})'
+    else:
+        return f'rgba({color[0]}, {color[1]}, {color[2]}, {color[3]})'
 
 # loads a json or dir of jsons
 def load(path):
